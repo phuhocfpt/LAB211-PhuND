@@ -32,7 +32,8 @@ public class Menu {
                     break;
                 case 3:
                     //Update/Delete(Semester and Course)
-                    
+                    management.updateOrDelete();
+                    break;
                 case 4:
                     //report(print all students)
                     

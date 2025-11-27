@@ -22,7 +22,7 @@ public class Input {
             System.out.print(label + " ");
             try {
                 input = Integer.parseInt(sc.nextLine().trim());
-
+                
                 if (input < min || input > max) {
                     System.err.println("Input must in range [" + min + ", " + max + "]");
                     continue;
@@ -148,6 +148,5 @@ public class Input {
         }
 
     }
-    
-    //function 3: Update/Delete
+
 }

@@ -8,6 +8,7 @@ package controller;
 import common.Input;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import object.SortByStudentName;
 import object.Student;
 
@@ -101,6 +102,92 @@ public class Management {
         System.out.println("-------------------------------------------------------------");
         for (Student sList : foundStudentList) {
             System.out.printf("%-20s%-10d%-10s\n", sList.getStudentName(), sList.getSemester(), sList.getCourseName());
+        }
+    }
+
+    //function 3: Update/Delete
+    public void updateOrDelete() {
+        System.out.println("=====UPDATE/DELETE=====");
+        //check existed id(must)
+        //input id to check
+        String id = Input.getStringWithRegex("Enter Student ID to update/delete:", "HE[0-9]{6}", "ID must follow HExxxxxx");
+        Student changeStudent = findStudentById(id);
+
+        if (changeStudent == null) {
+            System.err.println("Not found student with ID: " + id);
+            return;
+        }
+
+        //Print i4 of this student
+        System.out.printf("%-20s%-10s%-10s\n", "Student Name", "Semester", "Course Name");
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("%-20s%-10d%-10s\n",
+                changeStudent.getStudentName(),
+                changeStudent.getSemester(),
+                changeStudent.getCourseName());
+
+        //User choose Upadate or Delete
+        char choice = Input.getChoice("Enter your choice U/D:", "UD");
+
+        if (choice == 'D') {
+            studentList.remove(changeStudent);
+            System.out.println("===DELETE SUCCESSFULLY===");
+        }
+
+        if (choice == 'U') {
+            //Update Course and Semester
+            //Condition: New Course != current course
+
+            String currentCourse = changeStudent.getCourseName();
+
+            //Get new Semester
+            int newSemester = Input.getInt("Enter New Student Semester:", 1, 10);
+
+            while (true) {
+                //Get new course
+                String newCourse = Input.getCourseName("Enter new course(Java/.Net/C/C++):"
+                        + ", must != current course: " + currentCourse + ":");
+
+                if (newCourse.equalsIgnoreCase(currentCourse)) {
+                    System.err.println("New Course Must != current course:" + currentCourse + ":");
+                    continue;
+                }
+
+                //Update i4
+                changeStudent.setSemester(newSemester);
+                changeStudent.setCourseName(newCourse);
+                System.out.println("===UPDATE SUCCESSFULLY!===");
+                return;
+            }
+
+        }
+    }
+    
+    //function 4: Report
+    //Print All Student(Name, Course, Duplicate) if duplicate: Name and Course then 3rd col ++
+    
+    public void report(){
+        System.out.println("=====REPORT STUDENT=====");
+        
+        if (studentList == null) {
+            System.err.println("Student list is null!");
+            return;
+        }
+        
+        if(studentList.isEmpty()){
+            System.err.println("===NO STUDENT IN LIST===");
+            return;
+        }
+        
+        HashMap<String, String> studentMap = new HashMap<>();
+        for(Student s : studentList){
+            studentMap.put(s.getStudentName(), s.getCourseName());
+            
+            //need a loop to check the duplicate name and course
+            //if duplicate then ++ total variable
+            
+            //above loop: loop through to each Set(may need a temporary variabel
+            //to save current value to check) then compare to current?idk
         }
     }
 }
