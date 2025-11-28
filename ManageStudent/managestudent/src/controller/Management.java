@@ -9,6 +9,7 @@ import common.Input;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import object.Report;
 import object.SortByStudentName;
 import object.Student;
 
@@ -162,32 +163,70 @@ public class Management {
 
         }
     }
-    
+
     //function 4: Report
     //Print All Student(Name, Course, Duplicate) if duplicate: Name and Course then 3rd col ++
-    
-    public void report(){
+    public void report() {
         System.out.println("=====REPORT STUDENT=====");
-        
+
         if (studentList == null) {
             System.err.println("Student list is null!");
             return;
         }
-        
-        if(studentList.isEmpty()){
+
+        if (studentList.isEmpty()) {
             System.err.println("===NO STUDENT IN LIST===");
             return;
         }
-        
-        HashMap<String, String> studentMap = new HashMap<>();
-        for(Student s : studentList){
-            studentMap.put(s.getStudentName(), s.getCourseName());
-            
-            //need a loop to check the duplicate name and course
-            //if duplicate then ++ total variable
-            
-            //above loop: loop through to each Set(may need a temporary variabel
-            //to save current value to check) then compare to current?idk
+
+//        HashMap<String, String> studentMap = new HashMap<>();
+//        for(Student s : studentList){
+//            studentMap.put(s.getStudentName(), s.getCourseName());
+//            
+//            //need a loop to check the duplicate name and course
+//            //if duplicate then ++ total variable
+//            
+//            //above loop: loop through to each Set(may need a temporary variabel
+//            //to save current value to check) then compare to current?idk
+//            
+//            
+//        }
+
+        /*
+        Not use hashmap, change to use ArrayList with object Report contain(studentName, courseName, total)
+         */
+        ArrayList<Report> reportList = new ArrayList<>();
+
+        for (Student s : studentList) {
+            boolean isExist = false;
+
+            //check duplicate in report list
+            for (Report r : reportList) {
+                //check condition(duplicate name and course -> total++)
+                if (r.getStudentName().equalsIgnoreCase(s.getStudentName())
+                        && r.getCourseName().equalsIgnoreCase(s.getCourseName())) {
+                    r.setTotal(r.getTotal() + 1); //set total++
+
+                    isExist = true;
+                    break;
+                }
+            }
+
+            //After loop the reportList then isExist false => Not duplicate student(name, course) in list => Add new in report
+            if (!isExist) {
+                //not exist then add to report list
+                reportList.add(new Report(s.getStudentName(), s.getCourseName(), 1));
+            }
+        }
+
+        //print report
+        System.out.printf("%-20s|%-15s|%-10s\n", "Student Name", "Course", "Total");
+
+        for (Report r : reportList) {
+            System.out.printf("%-20s|%-15s|%-10d\n",
+                    r.getStudentName(),
+                    r.getCourseName(),
+                    r.getTotal());
         }
     }
 }
